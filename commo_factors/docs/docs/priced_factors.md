@@ -338,6 +338,11 @@ prices_figure.save("../../docs/docs/images/priced_factors/commodity_futures_pric
 
 ### Characteristics of Commodity Futures
 
+We now turn to the construction of characteristics,
+that will be used to form the commodity factor portfolios.
+
+- Momentum: we define momentum for each commodity $j$ as the cumulative excess futures return from the prior 12 months, i.e., $Momentum^j_t = \Prod_{s = t-11}^t (1 + R_{j,t,s}^{T_1}) - 1$, where $R_{j,t,s}^{T_1}$ is the excess return of commodity $j$ at time $t$ for the contract with maturity $T_1$.
+
 
 ### Commodity Factor Portfolios
 
