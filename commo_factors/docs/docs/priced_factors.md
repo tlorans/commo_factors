@@ -1,12 +1,20 @@
 # Which Commodity Factors are Priced?
 
-- Present the empirical evidence (e.G. 4-factor model)
+When using `yfinance` for commodity futures, we observe only the **front-month futures prices**, typically rolled automatically.
 
-- Describe the role of:
-    - Average Commodity Factor
-    - Basis
-    - Momentum
-    - Basis-Momentum
+This allows us to construct:
+
+- **Excess returns** on fully collateralized long futures positions.
+- **Momentum** from rolling 12-month returns.
+- **Average Commodity Factor** as the equal-weighted return across contracts.
+
+However, we cannot construct basis-related factors:
+
+- **Basis** requires both front- and second-nearby prices.
+- **Basis-Momentum** needs the term structure slope over time.
+
+Thus, our pricing tests will focus on factors we can construct reliably with `yfinance`.
+
 
 ## Data and variables
 
@@ -72,6 +80,10 @@
 
 ### Commodity futures data
 
+
+#### Futures Data from Yahoo Finance
+
+Yahoo Finance provides daily prices of nearest futures contracts, specifically what they call **continuous front-month futures** for commodities (e.h., `CL=F` for WTI Crude Oil). These are automatically rolled contracts and do not represent a specific maturity date.
 
 In this section, we will download and process commodity futures data using the `yfinance` library and convert it to a Polars DataFrame. We will then save the data in Parquet format for further analysis.
 
@@ -194,6 +206,8 @@ soybeans_returns_figure.save("../../docs/docs/images/priced_factors/soybeans_ret
 
 ![Soybean Futures Prices](../images/priced_factors/soybean_futures_prices.png)
 
+
+#### Calculating Daily Returns
 
 We can now calculate the daily returns for each commodity futures contract. The following code snippet demonstrates how to compute the percentage change in the adjusted close prices and save the results in a new Parquet file.
 
@@ -336,12 +350,6 @@ prices_figure.save("../../docs/docs/images/priced_factors/commodity_futures_pric
 
 
 
-### Characteristics of Commodity Futures
-
-We now turn to the construction of characteristics,
-that will be used to form the commodity factor portfolios.
-
-- Momentum: we define momentum for each commodity $j$ as the cumulative excess futures return from the prior 12 months, i.e., $Momentum^j_t = \Prod_{s = t-11}^t (1 + R_{j,t,s}^{T_1}) - 1$, where $R_{j,t,s}^{T_1}$ is the excess return of commodity $j$ at time $t$ for the contract with maturity $T_1$.
 
 
 ### Commodity Factor Portfolios
