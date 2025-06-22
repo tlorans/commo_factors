@@ -16,7 +16,7 @@ tickers = {
 }
 
 # Download monthly data
-df = yf.download(list(tickers.values()), start="2000-01-01", interval="1mo", auto_adjust=False)
+df = yf.download(list(tickers.values()), start="2000-01-01", interval="1d", auto_adjust=False)
 df = df.stack(level=1).reset_index()  # Convert from wide to long format
 
 # Convert to Polars DataFrame

@@ -12,3 +12,4 @@
 
 - Highlight strengths / weaknesses of factor apporaches
 
+(part 6. Are commercial commodity indices spanned by commodity factor portfolios?)

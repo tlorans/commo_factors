@@ -2,7 +2,7 @@
 
 There is growing evidence that commodity investment strategies based on exposures to commodity fundamental characteristics earn significant premiums, in addition to the premium offered by a broadly diversified commodity index. This is consistent with the findings in equity and fixed income markets, where factor-based strategies have been shown to outperform traditional market-capitalization-weighted indices.
 
-Research identified that commodity investment strategies based on exposures to commodity fundamental characteristics such as the basis, momentum, basis-momentum, value, inflation, hedging pressure, volatility, speculative pressure, skewness, dollar beta and liquidity outperform commodity indices such as the S&P GSCI or a passive equally weighted index of all commodities ... (see Miffre, 2016[1] for a review).
+Research identified that commodity investment strategies based on exposures to commodity fundamental characteristics such as the basis, momentum, basis-momentum, value, inflation, hedging pressure, volatility, speculative pressure, skewness, dollar beta and liquidity outperform commodity indices such as the S&P GSCI or a passive equally weighted index of all commodities (see Miffre, 2016[1] for a review).
 
 Sakkas and Tessaromatis, 2020[2] ask the following four questions:
 

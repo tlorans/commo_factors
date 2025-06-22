@@ -4,3 +4,5 @@
 - Use rolling regressions, economic indicators or filters
 -  Simple dynamic strategy example vs. passive
 - Performance comparison
+
+(part 7. Timing commodity factor portfolios)
