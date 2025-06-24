@@ -19,9 +19,6 @@ Thus, our pricing tests will focus on factors we can construct reliably with `yf
 ## Commodity Futures
 
 
-
-### Futures Data from Yahoo Finance
-
 Yahoo Finance provides daily prices of nearest futures contracts, specifically what they call **continuous front-month futures** for commodities (e.h., `CL=F` for WTI Crude Oil). These are automatically rolled contracts and do not represent a specific maturity date.
 
 In this section, we will download and process commodity futures data using the `yfinance` library and convert it to a Polars DataFrame. We will then save the data in Parquet format for further analysis.
@@ -32,17 +29,53 @@ import polars as pl
 
 # Define commodity futures tickers
 tickers = {
+    # Energy
     "WTI Crude Oil": "CL=F",
-    "Gold": "GC=F",
+    "Brent Crude Oil": "BZ=F",
+    "Gasoline RBOB": "RB=F",
+    "Heating Oil": "HO=F",
+    "Natural Gas": "NG=F",
+    "Propane": "PG=F",  # approximate or rarely available
+    # Gasoil is not available directly on Yahoo Finance
+
+    # Grains & Oilseeds
     "Corn": "ZC=F",
     "Wheat": "ZW=F",
     "Soybeans": "ZS=F",
+    "Soybean Meal": "ZM=F",
+    "Soybean Oil": "ZL=F",
+    "Oats": "ZO=F",
+    # Canola is traded on ICE Canada, not reliably on Yahoo
+
+    # Livestock
+    "Live Cattle": "LE=F",
+    "Feeder Cattle": "GF=F",
+    "Lean Hogs": "HE=F",
+    # Pork Belly: contract discontinued
+
+    # Metals
+    "Gold": "GC=F",
     "Silver": "SI=F",
     "Copper": "HG=F",
-    "Natural Gas": "NG=F",
+    "Platinum": "PL=F",
+    "Palladium": "PA=F",
+    # LME metals (Aluminum, Zinc, Nickel, etc.) are not on Yahoo Finance
+
+    # Softs
     "Coffee": "KC=F",
-    "Cotton": "CT=F"
+    "Cocoa": "CC=F",
+    "Cotton": "CT=F",
+    "Sugar": "SB=F",
+    "Orange Juice": "OJ=F",
+    "Lumber": "LB=F",
+    # Rubber is TOCOM, not on Yahoo
+    # Ethanol and Milk may not have reliable tickers on Yahoo
+
+    # Others
+    "Ethanol": "EH=F",  # may exist, but not always available
+    "Skim Milk": "DA=F",  # Approximate dairy futures ticker
 }
+
 
 # Download monthly data
 df = yf.download(list(tickers.values()), start="2000-01-01", interval="1d", auto_adjust=False)
@@ -64,7 +97,8 @@ pl_df = pl_df.rename({
 })
 
 # Reorder columns
-pl_df = pl_df.select(["date", "symbol", "volume", "open", "low", "high", "close", "adjusted_close"])
+pl_df = pl_df.select(["date", "symbol", "volume", "open", "low", "high", "close", "adjusted_close"]
+                     ).filter(pl.col("adjusted_close") > 0)
 
 print(pl_df.head())
 
@@ -145,8 +179,6 @@ soybeans_returns_figure.save("../../docs/docs/images/priced_factors/soybeans_ret
 
 ![Soybean Futures Prices](../images/priced_factors/soybean_futures_prices.png)
 
-
-### Calculating Daily Returns
 
 We can now calculate the daily returns for each commodity futures contract. The following code snippet demonstrates how to compute the percentage change in the adjusted close prices and save the results in a new Parquet file.
 
@@ -289,8 +321,6 @@ prices_figure.save("../../docs/docs/images/priced_factors/commodity_futures_pric
 
 
 
-
-
 ## Commodity Factor Portfolios
 
 To form the commodity factor portfolios, we rely on the simple portfolio sort. The idea is simple. On one date:
@@ -303,4 +333,250 @@ To form the commodity factor portfolios, we rely on the simple portfolio sort. T
 The outcome is a time series of portfolio returns \\(r^j_t\\) for each portfolio \\(j\\) and time \\(t\\). An anomaly is identified if the \\(t\\)-test between the first \\(j=1\\) and the last group \\(j=J\\) unveils a significant difference in average returns. 
 
 
+We first construct the momentum characteristic, which is the cumulative return of the past 11 months (excluding the most recent month). This is done by calculating the cumulative product of \\(1 + r_t\\) for the past 11 months.
 
+```python
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+from regtabletotext import prettify_result
+
+
+LOW_Q, HIGH_Q = 0.01, 0.99        # 1-percent winsorisation tails
+
+# ── 1. Load panel of excess returns ────────────────────────────────────
+# expected columns: date (yyy-mm-dd), ticker, ret  (monthly excess return in decimal form)
+raw = (
+    pd.read_parquet("commodity_futures_returns.parquet")
+    .query("date >= '2010-01-01'")  # filter for dates if needed
+)
+
+
+# 2. Winsorise returns cross-sectionally each month
+def winsorise_month(df: pd.DataFrame) -> pd.DataFrame:
+    """Clip ret to [1st, 99th] percentile for this month’s cross section."""
+    lo = df["ret"].quantile(LOW_Q)
+    hi = df["ret"].quantile(HIGH_Q)
+    return df.assign(ret=df["ret"].clip(lower=lo, upper=hi))
+
+wins = (
+    raw
+      .assign(date=lambda d: pd.to_datetime(d["date"]))
+      .groupby("date")
+      .apply(winsorise_month)
+      .reset_index(drop=True)
+)
+
+# ── 2. Momentum: cumulative product of (1+ret) for the past 11 months ────────
+# but we have in daily data, so we need to adjust the window
+# to account for the number of trading days in a month (typically around 20-22
+# trading days per month).
+# Here we use a window of 11 months, which is approximately 220 trading days.
+def add_momentum(df: pd.DataFrame, window: int = 220) -> pd.DataFrame:
+    """
+    Add a 'momentum' column: cumulative return from t-12 to t-2
+    (skip the most-recent month, hence shift(1)).
+    """
+    # Ensure date column is datetime and properly sorted
+    df = df.assign(date=pd.to_datetime(df["date"])).sort_values("date")
+    
+    # Rolling cumulative return = Π(1+ret) − 1
+    df["momentum"] = (
+        df["ret"]
+        .shift(1)                                     # skip last month
+        .rolling(window=window, min_periods=window)   # t-12 … t-2 (11 obs)
+        .apply(lambda x: (1 + x).prod() - 1, raw=True)
+    )
+    return df
+
+panel = (
+    wins
+    .groupby("symbol")  # keep original index
+    .apply(add_momentum)
+    .reset_index(drop=True)
+    .dropna(subset=["momentum"])  # drop rows where momentum is NaN
+)
+```
+
+We will rebalance the portfolios monthly, using the momentum characteristic to sort the commodities into quantiles. The following code snippet demonstrates how to create the portfolios based on momentum and calculate their returns.
+
+
+```python
+panel["rebalance_date"] = panel["date"].dt.to_period("M").dt.to_timestamp()
+
+
+# ── 4. Month-by-month portfolio formation ──────────────────────────────
+#     and equal-weight (mean) portfolio returns
+n_port = 3                                       # quintiles (change as desired)
+
+rebalancing_universe = (
+    panel
+    .drop_duplicates(subset=["symbol", "rebalance_date"])  # one row per symbol per month
+    .groupby("rebalance_date")
+    .apply(lambda x: x.assign(
+        portfolio=pd.qcut(x["momentum"], q=[0, 0.5, 1], labels=["low", "high"])
+    ))
+    .reset_index(drop=True)
+    .dropna(subset=["portfolio"])
+    .get(["symbol", "rebalance_date", "portfolio"])
+)
+
+# Merge daily panel with monthly portfolio assignment
+panel_with_portfolio = (
+    panel
+    .merge(rebalancing_universe, on=["symbol", "rebalance_date"], how="left")
+    .dropna(subset=["portfolio"])  # drop rows before first assignment
+)
+
+
+daily_portfolio_returns = (
+    panel_with_portfolio
+    .groupby(["date", "portfolio"], as_index=False)
+    .agg(ret=("ret", "mean"))  # equal-weight return
+)
+
+cumulative_rets = (
+    daily_portfolio_returns.sort_values(["portfolio", "date"])  # sort by portfolio and date
+      .groupby("portfolio")          # one time-series per portfolio
+      .apply(lambda df: df.assign(
+          cumulative_ret=(1 + df["ret"]).cumprod() # running product minus 1
+      ))
+      .reset_index(drop=True)
+)
+
+cumulative_rets.to_csv("cumulative_momentum_portfolios.csv", index=False)
+
+from plotnine import * 
+
+# ── 5. Plotting the portfolio returns ───────────────────────────────────
+plot = (
+    ggplot(cumulative_rets, aes(x="date", y="cumulative_ret", color="portfolio")) +
+    geom_line() +
+    labs(title="Momentum Portfolio Returns",
+         x="Date",
+         y="Monthly Return",
+         color="Portfolio")
+)
+
+plot.show()
+
+```
+
+Interestingly, the low momentum portfolio seems to outperform the high momentum portfolio, which is contrary to the typical expectation in momentum strategies. 
+
+![Cumulative Return: Momentum Long-Short vs. Commodity Market](../images/priced_factors/momentum_portfolios.png)
+
+
+Based on the previous insights, we construct a **reversal portfolio** by taking the difference between the low and high momentum portfolios. In other words, we create a long-short portfolio that goes long on the low momentum portfolio and short on the high momentum portfolio.
+
+```python
+
+long_short = (daily_portfolio_returns
+  .pivot_table(index="date", columns="portfolio", values="ret")
+  .reset_index()
+  .assign(long_short=lambda x: x["low"]-x["high"])
+)
+
+
+
+cum_long_short = (
+    long_short
+    .assign(cumulative_long_short=lambda x: (1 + x["long_short"]).cumprod() - 1)
+)
+
+# plot long short returns
+plot_ls = (
+    ggplot(cum_long_short, aes(x="date", y="cumulative_long_short")) +
+    geom_line(color="blue") +
+    labs(title="Cumulative Long-Short Momentum Returns",
+         x="Date",
+         y="Cumulative Return")
+)
+
+plot_ls.show()
+```
+
+![Cumulative Long-Short Momentum Returns](../images/priced_factors/momentum_long_short.png)
+
+
+We now compare the cumulative returns of the long-short reversal portfolio with the equal-weighted market portfolio. The market portfolio is constructed by averaging the daily returns of all commodities, which gives us a benchmark to assess the performance of our reversal strategy.
+
+```python
+
+# ────────────────────────────────────────────────────────────────────────
+# 1.  Equal-weight “market” portfolio (all contracts each day)  🚩
+# ────────────────────────────────────────────────────────────────────────
+market_daily = (
+    wins                       # winsorised daily returns you already created
+      .groupby("date", as_index=False)
+      .agg(mkt_ret=("ret", "mean"))   # simple equal-weight
+)
+
+# cumulative market return
+market_cum = (
+    market_daily
+      .assign(cumulative_mkt=lambda d: (1 + d["mkt_ret"]).cumprod() - 1)
+      .get(["date", "cumulative_mkt"])
+)
+
+
+# ────────────────────────────────────────────────────────────────────────
+# 2.  Combine long-short and market series for plotting  🚩
+# ────────────────────────────────────────────────────────────────────────
+plot_df = (
+    cum_long_short[["date", "cumulative_long_short"]]
+      .merge(market_cum, on="date", how="inner")
+      .melt(id_vars="date", var_name="series", value_name="cum_ret")
+      .replace({
+          "cumulative_long_short": "Long-Short factor",
+          "cumulative_mkt": "Commodity market"
+      })
+)
+
+plot_both = (
+    ggplot(plot_df, aes(x="date", y="cum_ret", color="series")) +
+    geom_line() +
+    labs(
+        title="Cumulative Return: Momentum Long-Short vs. Commodity Market",
+        x="Date", y="Cumulative Return",
+        color=""
+    )
+)
+
+plot_both.show()
+```
+
+![Cumulative Return: Momentum Long-Short vs. Commodity Market](../images/priced_factors/momentum_long_short_vs_market.png)
+
+
+We can finally test the significance of the long-short portfolio returns using a t-test. This will help us determine if the average returns of the long-short portfolio are significantly different from zero.
+
+```python
+import statsmodels.api as sm
+from regtabletotext import prettify_result
+
+
+model_fit = (sm.OLS.from_formula(
+    formula="long_short ~ 1",
+    data=long_short
+  )
+  .fit(cov_type="HAC", cov_kwds={"maxlags": 6})
+)
+prettify_result(model_fit)
+```
+
+```bash
+OLS Model:
+long_short ~ 1
+
+Coefficients:
+           Estimate  Std. Error  t-Statistic  p-Value
+Intercept       0.0         0.0         2.17     0.03
+
+Summary statistics:
+- Number of observations: 3,672
+- R-squared: 0.000, Adjusted R-squared: 0.000
+- F-statistic not available
+```
+
+Since p = 0.03 < 0.05, we can reject the null of zero mean at the 5 % level. This means that the average return of the long-short reversal portfolio is statistically significant, indicating that the strategy has a positive expected return over the sample period.

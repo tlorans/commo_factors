@@ -13,15 +13,6 @@ raw = (
     .query("date >= '2010-01-01'")  # filter for dates if needed
 )
 
-# Find top 10 largest returns (absolute value)
-top_outliers = (
-    raw.loc[raw["ret"].abs().nlargest(10).index]
-    .sort_values("ret", ascending=False)
-)
-
-print("Top absolute return outliers:")
-print(top_outliers)
-
 
 # 2. Winsorise returns cross-sectionally each month
 def winsorise_month(df: pd.DataFrame) -> pd.DataFrame:
@@ -37,10 +28,6 @@ wins = (
       .apply(winsorise_month)
       .reset_index(drop=True)
 )
-
-
-# check number of unique symbols per dates
-print(raw.groupby("date")["symbol"].nunique().describe())
 
 # ── 2. Momentum: cumulative product of (1+ret) for the past 11 months ────────
 # but we have in daily data, so we need to adjust the window
@@ -137,10 +124,12 @@ plot = (
 
 plot.show()
 
+plot.save("../../docs/docs/images/priced_factors/momentum_portfolios.png", dpi=300)
+
 long_short = (daily_portfolio_returns
   .pivot_table(index="date", columns="portfolio", values="ret")
   .reset_index()
-  .assign(long_short=lambda x: x["high"]-x["low"])
+  .assign(long_short=lambda x: x["low"]-x["high"])
 )
 
 
@@ -160,6 +149,52 @@ plot_ls = (
 )
 
 plot_ls.show()
+
+plot_ls.save("../../docs/docs/images/priced_factors/momentum_long_short.png", dpi=300, width=10, height=6)
+
+# ────────────────────────────────────────────────────────────────────────
+# 1.  Equal-weight “market” portfolio (all contracts each day)  🚩
+# ────────────────────────────────────────────────────────────────────────
+market_daily = (
+    wins                       # winsorised daily returns you already created
+      .groupby("date", as_index=False)
+      .agg(mkt_ret=("ret", "mean"))   # simple equal-weight
+)
+
+# cumulative market return
+market_cum = (
+    market_daily
+      .assign(cumulative_mkt=lambda d: (1 + d["mkt_ret"]).cumprod() - 1)
+      .get(["date", "cumulative_mkt"])
+)
+
+
+# ────────────────────────────────────────────────────────────────────────
+# 2.  Combine long-short and market series for plotting  🚩
+# ────────────────────────────────────────────────────────────────────────
+plot_df = (
+    cum_long_short[["date", "cumulative_long_short"]]
+      .merge(market_cum, on="date", how="inner")
+      .melt(id_vars="date", var_name="series", value_name="cum_ret")
+      .replace({
+          "cumulative_long_short": "Long-Short factor",
+          "cumulative_mkt": "Commodity market"
+      })
+)
+
+plot_both = (
+    ggplot(plot_df, aes(x="date", y="cum_ret", color="series")) +
+    geom_line() +
+    labs(
+        title="Cumulative Return: Momentum Long-Short vs. Commodity Market",
+        x="Date", y="Cumulative Return",
+        color=""
+    )
+)
+
+plot_both.show()
+
+plot_both.save("../../docs/docs/images/priced_factors/momentum_long_short_vs_market.png", dpi=300, width=10, height=6)
 
 model_fit = (sm.OLS.from_formula(
     formula="long_short ~ 1",
