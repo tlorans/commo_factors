@@ -19,65 +19,6 @@ Thus, our pricing tests will focus on factors we can construct reliably with `yf
 ## Commodity Futures
 
 
-### 🛢️ Energy
-| Commodity           | Exchange | Ticker |
-|---------------------|----------|--------|
-| Brent Crude Oil     | ICE      | CO     |
-| Gasoil Petroleum    | ICE      | QS     |
-| Gasoline            | NYMEX    | HU/XB  |
-| Heating Oil         | NYMEX    | HO     |
-| Natural Gas         | NYMEX    | NG     |
-| Propane             | NYMEX    | PN     |
-| WTI Crude Oil       | NYMEX    | CL     |
-
-### 🌾 Grains & Oilseeds
-| Commodity         | Exchange | Ticker |
-|-------------------|----------|--------|
-| Canola            | WCE      | RC     |
-| Corn              | CBOT     | C-     |
-| Oats              | CBOT     | O-     |
-| Rough Rice        | CBOT     | RR     |
-| Soybean Meal      | CBOT     | SM     |
-| Soybean Oil       | CBOT     | BO     |
-| Soybeans          | CBOT     | S-     |
-| Wheat             | CBOT     | W      |
-
-### 🐄 Livestock
-| Commodity       | Exchange | Ticker |
-|-----------------|----------|--------|
-| Feeder Cattle   | CME      | FC     |
-| Lean Hogs       | CME      | LH     |
-| Live Cattle     | CME      | LC     |
-| Pork Belly      | CME      | PB     |
-
-### 🪙 Metals
-| Commodity     | Exchange | Ticker |
-|---------------|----------|--------|
-| Aluminum      | LME      | LA     |
-| Copper        | NYMEX    | HG     |
-| Gold          | NYMEX    | GC     |
-| Lead          | LME      | LL     |
-| Nickel        | LME      | LN     |
-| Palladium     | NYMEX    | PA     |
-| Platinum      | NYMEX    | PL     |
-| Silver        | NYMEX    | SI     |
-| Tin           | LME      | LT     |
-| Zinc          | LME      | LX     |
-
-### 🍫 Softs
-| Commodity       | Exchange | Ticker |
-|-----------------|----------|--------|
-| Cocoa           | ICE      | CC     |
-| Coffee          | ICE      | KC     |
-| Cotton          | ICE      | CT     |
-| Ethanol         | CME      | DL     |
-| Lumber          | CME      | LB     |
-| Milk            | CME      | DE     |
-| Orange Juice    | ICE      | JO     |
-| Rubber          | TOCOM    | YR     |
-| Sugar           | ICE      | SB     |
-
-
 
 ### Futures Data from Yahoo Finance
 
