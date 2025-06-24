@@ -18,12 +18,10 @@ Based on each historical events on IBTrACS, we generate 30 synthetic tracks usin
 
 
 
-## Physical risk Factor Portfolio
+## Physical Risk Factor Portfolio
 
 We use the expected annual impact of physical risks on commodities to construct a factor portfolio. This portfolio is designed to capture the systematic risk associated with physical hazards affecting commodity production.
 
 
-### Performance of the Physical Risk Factor Portfolio
 
 
-### Concerns About Cyclone Activity
