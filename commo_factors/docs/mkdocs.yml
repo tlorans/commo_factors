@@ -6,7 +6,7 @@ theme:
     - navigation.tabs
 
 nav:
-  - Home: index.md
+  # - Home: index.md
   # - Introduction: intro.md
   - Factor Investing in Commodities: factor_investing.md
   - Is Physical Risk Priced?: is_physical_risk_priced.md
