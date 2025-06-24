@@ -1,4 +1,4 @@
-# Which Commodity Factors are Priced?
+# Factor investing in commodities
 
 When using `yfinance` for commodity futures, we observe only the **front-month futures prices**, typically rolled automatically.
 
@@ -16,7 +16,7 @@ However, we cannot construct basis-related factors:
 Thus, our pricing tests will focus on factors we can construct reliably with `yfinance`.
 
 
-## Data and variables
+## Commodity Futures
 
 
 ### 🛢️ Energy
@@ -78,10 +78,8 @@ Thus, our pricing tests will focus on factors we can construct reliably with `yf
 | Sugar           | ICE      | SB     |
 
 
-### Commodity futures data
 
-
-#### Futures Data from Yahoo Finance
+### Futures Data from Yahoo Finance
 
 Yahoo Finance provides daily prices of nearest futures contracts, specifically what they call **continuous front-month futures** for commodities (e.h., `CL=F` for WTI Crude Oil). These are automatically rolled contracts and do not represent a specific maturity date.
 
@@ -207,7 +205,7 @@ soybeans_returns_figure.save("../../docs/docs/images/priced_factors/soybeans_ret
 ![Soybean Futures Prices](../images/priced_factors/soybean_futures_prices.png)
 
 
-#### Calculating Daily Returns
+### Calculating Daily Returns
 
 We can now calculate the daily returns for each commodity futures contract. The following code snippet demonstrates how to compute the percentage change in the adjusted close prices and save the results in a new Parquet file.
 
@@ -352,13 +350,16 @@ prices_figure.save("../../docs/docs/images/priced_factors/commodity_futures_pric
 
 
 
-### Commodity Factor Portfolios
+## Commodity Factor Portfolios
+
+To form the commodity factor portfolios, we rely on the simple portfolio sort. The idea is simple. On one date:
+
+1. Rank commodities according to a particular criterion (e.g., past returns).
+2. form \\(J \geq 2\\) portfolios (i.e., homogenous groups) consisting on the same number of stocks according to the ranking (usually \\(J=2\\), \\(J=3\\), \\(J=5\\) or \\(J=10\\) portfolios are built, based on the median, terciles, quintiles or deciles of the criterion);
+3. the weight of stocks inside the portfolio is uniform in our case.
+4. at a future date \\(t+1\\), report the returns of the portfolios. Then iterate the procedure until the chronological end of the sample.
+
+The outcome is a time series of portfolio returns \\(r^j_t\\) for each portfolio \\(j\\) and time \\(t\\). An anomaly is identified if the \\(t\\)-test between the first \\(j=1\\) and the last group \\(j=J\\) unveils a significant difference in average returns. 
 
 
-## Performance of Commodity Factors Portfolios 
-
-
-## Choosing Priced Commodity Factors
-
-The Harvey and Liu (2019) Approach
 

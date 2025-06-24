@@ -7,12 +7,12 @@ theme:
 
 nav:
   - Home: index.md
-  - Introduction: intro.md
-  - Priced Factors: priced_factors.md
+  # - Introduction: intro.md
+  - Factor Investing in Commodities: factor_investing.md
   - Is Physical Risk Priced?: is_physical_risk_priced.md
   # - Multi-Factor Portfolio: portfolio_construction.md
   # - Comparison with Indices: comparison_vs_index.md
-  - Concerns about Cyclone Activity: concerns.md
+  # - Concerns about Cyclone Activity: concerns.md
   # - Dynamic Strategies: predictability.md
 
 
