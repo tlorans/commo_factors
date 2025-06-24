@@ -5,6 +5,12 @@ import pandas as pd
 from plotnine import *
 from datetime import datetime, timedelta
 
+
+symbols = {
+    ""
+}
+
+
 # Load API key
 load_dotenv()
 api_key = os.getenv("COMMODITIES_API_KEY")
