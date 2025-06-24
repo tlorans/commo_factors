@@ -355,11 +355,10 @@ prices_figure.save("../../docs/docs/images/priced_factors/commodity_futures_pric
 ### Commodity Factor Portfolios
 
 
-## Performance of Commodity Portfolios 
+## Performance of Commodity Factors Portfolios 
 
 
 ## Choosing Priced Commodity Factors
 
-### The Harvey and Liu (2019) Approach
+The Harvey and Liu (2019) Approach
 
-### Spanning Tests

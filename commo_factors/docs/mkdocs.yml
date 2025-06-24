@@ -9,9 +9,11 @@ nav:
   - Home: index.md
   - Introduction: intro.md
   - Priced Factors: priced_factors.md
-  - Multi-Factor Portfolio: portfolio_construction.md
-  - Comparison with Indices: comparison_vs_index.md
-  - Dynamic Strategies: predictability.md
+  - Is Physical Risk Priced?: is_physical_risk_priced.md
+  # - Multi-Factor Portfolio: portfolio_construction.md
+  # - Comparison with Indices: comparison_vs_index.md
+  - Concerns about Cyclone Activity: concerns.md
+  # - Dynamic Strategies: predictability.md
 
 
 extra_javascript:
