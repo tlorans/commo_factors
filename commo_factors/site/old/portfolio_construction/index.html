@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>How to Construct a Multi-Factor Commodity Portfolio? - Factor-Based Commodity Investing</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "How to Construct a Multi-Factor Commodity Portfolio?";
+        var mkdocs_page_input_path = "old\\portfolio_construction.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Factor-Based Commodity Investing
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../factor_investing/">Factor Investing in Commodities</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../is_physical_risk_priced/">Is Physical Risk Priced?</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Factor-Based Commodity Investing</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">How to Construct a Multi-Factor Commodity Portfolio?</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/tlorans/commo_factors/edit/master/docs/old/portfolio_construction.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="how-to-construct-a-multi-factor-commodity-portfolio">How to Construct a Multi-Factor Commodity Portfolio?</h1>
+<ul>
+<li>Explain portfolio theory in the context of multiple factors </li>
+<li>Show how to build an optimal commodity portfolio</li>
+<li>Static (equal-weight or risk-parity) vs. optimized weighting </li>
+<li>Implementation challenges </li>
+</ul>
+<p>(part 5. of the paper, multifactor commodity portfolios)</p>
+<h2 id="equally-weighted-commodity-factor-portfolio">Equally-Weighted Commodity Factor Portfolio</h2>
+<p>The equally weighted commodity factor portfolio investes proportionally in each of the three commodity factors and since it does not use estimates of return or risk, is by definition free of estimation risk. EW will be mean-variance optimal when commodity factor expected returns, variances and correlations are the same. </p>
+<h2 id="the-inverse-variance-portfolio">The Inverse Variance Portfolio</h2>
+<p>The inverse variance (IV) portfolio rule depends only on variance and assumes that the correlation between the factors is zero. IV weights are calculated according to the following equation:</p>
+<p>$$
+w_{i,t} = \frac{1/\sigma_{i,t}^2}{\sum_{j=1}^{N} 1/\sigma_{j,t}^2}
+$$ </p>
+<p>where \(\sigma_{i,t}^2\) is the estimated variance of commodity \(i\). </p>
+<h2 id="minvar-rule">MinVar Rule</h2>
+<p>MinVar rule is the short sale-constrained minimum variance portfolio of commodity factors. </p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/tlorans/commo_factors" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

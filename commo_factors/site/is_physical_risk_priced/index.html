@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Is Physical Risk Priced? - Factor-Based Commodity Investing</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Is Physical Risk Priced?";
+        var mkdocs_page_input_path = "is_physical_risk_priced.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Factor-Based Commodity Investing
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../factor_investing/">Factor Investing in Commodities</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Is Physical Risk Priced?</a>
+    <ul class="current">
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Factor-Based Commodity Investing</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Is Physical Risk Priced?</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/tlorans/commo_factors/edit/master/docs/is_physical_risk_priced.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="is-physical-risk-priced-in-commodities">Is Physical Risk Priced in Commodities?</h1>
+<p>The distribution of production sources for commodities is crucial in understanding the exposure to physical risks. Different commodities have varying levels of vulnerability based on their production locations and methods. For instance, commodities produced in regions prone to extreme weather events or natural disasters may face higher physical risks.</p>
+<p>For example, the map below shows the distribution of corn production in the world.</p>
+<p><img alt="map" src="../images/hazard/corn_map.jpg" /></p>
+<p>We can evaluate the physical risk exposure of commodities by analyzing their geographic distribution and the associated hazards. The following map illustrates a sample of tropical cyclone tracks, using CLIMADA.</p>
+<p><img alt="Tropical Cyclone Tracks" src="../images/hazard/trop_cyclones_tracks.png" /></p>
+<p>To quantify the financial relevance of exposure to tropical cyclones, we follow a forward-looking methodology inspired by Brière et al. (2024). Specifically, we use the CLIMADA platform to simulate damages to commodity production assets based on both historical and synthetic tropical cyclone tracks.</p>
+<p>Following Brière et al. (2024), we could generate 30 synthetic tracks for each historical cyclone in the IBTrACS archive, enabling a probabilistic assessment of expected damages. For each commodity, we overlay these cyclone tracks with the geographic distribution of production (e.g., corn, sugarcane, palm oil) and compute the Expected Annual Impact (EAI) — the average projected damage to physical production assets in a given climate scenario (e.g., RCP 4.5).</p>
+<p>This risk exposure measure captures systematic climate-related shocks that are likely to affect the production of key commodities in cyclone-prone regions such as:</p>
+<ul>
+<li>Southeast Asia (palm oil, rice)</li>
+<li>Central America and the Caribbean (sugar, bananas)</li>
+<li>East Asia (aquaculture, rice)</li>
+<li>U.S. Gulf Coast (sugarcane, soy)</li>
+</ul>
+<p>We could then use these risk metrics to build a physical risk factor portfolio, assigning higher weights to commodities with greater EAI. This portfolio is intended to capture the systematic component of physical risk from cyclones, and to test whether this risk is priced in commodity markets.</p>
+<p>However, the findings in Brière et al. (2024) suggest that markets do not consistently price this risk. They find no significant premium associated with cyclone exposure over the period 2016–2022 — unless investor concerns about tropical cyclones are elevated.</p>
+<p>To proxy for these concerns, they use:</p>
+<ul>
+<li>Google Search Volume Index (SVI) for "tropical cyclone"</li>
+<li>Monthly counts of cyclone events (EM-DAT)</li>
+</ul>
+<p>When investor attention to cyclones is low, highly exposed firms tend to earn higher returns, consistent with compensation for bearing climate risk. But when attention is high, those same firms underperform, suggesting that investor sentiment and attention drive short-term return dynamics more than rational pricing of physical risks.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../factor_investing/" class="btn btn-neutral float-left" title="Factor Investing in Commodities"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/tlorans/commo_factors" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../factor_investing/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

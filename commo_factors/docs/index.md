@@ -1,6 +1,7 @@
 # Factor-Based Commodity Investing
 
-This site presents an overview of research and strategies related to **factor investing in commodity markets**, with a focus on the role of **physical climate risks** such as tropical cyclones.
+Over the past two decades, commodity investing has undergone a significant evolution, with institutional interest driving the development of increasingly sophisticated commodity indices. First-generation indices offered long-only exposure without regard for futures term structure, while second-generation indices incorporated signals like momentum and roll yield to mitigate the performance drag from contango. Third-generation indices advanced this further by adopting long-short strategies based on term structure and momentum, reducing volatility and improving performance—especially during periods of market stress (Miffre, 2012).
 
-- **Factor Investing in Commodities**: Overview of classical factor strategies. Work in progress.
-- **Is Physical Risk Priced?**: Work in progress.
+Yet, despite this evolution, commodity indices have largely overlooked the growing importance of physical climate risks. Recent advances in climate impact modeling now enable forward-looking, geographically resolved assessments of production disruptions due to extreme weather. These risks are especially salient for commodities with concentrated production in cyclone-prone regions or climate-vulnerable zones.
+
+This proposal aims to extend the factor investing approach in commodities by incorporating physical climate risk exposures into systematic strategies. While traditional indices rely on backwardation, momentum, or mean reversion, we explore whether exposure to tropical cyclone risk—quantified using tools like CLIMADA—can explain cross-sectional return differences or serve as a new priced factor in commodity markets. Our approach complements the third-generation index logic by capturing a neglected but potentially systematic source of return variation.
