@@ -1,0 +1,24 @@
+project:
+  type: book
+book:
+  title: "Valuation, Rebuilt: Investment CAPM"
+  author: "Thomas Lorans"
+  chapters:
+    - index.qmd
+    # - 01-intro.qmd
+    # - 02-dcf-vs-investmentcapm.qmd
+    # - 03-firm-problem.qmd
+    # - 04-euler-marginal-q.qmd
+    # - 05-cashflows-from-production.qmd
+    # - 06-cost-of-capital-endogenous.qmd
+    # - 07-q-factors-empirics.qmd
+    # - 08-growth-investment-policy.qmd
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    number-sections: true
+execute:
+  echo: true
+  warning: false
